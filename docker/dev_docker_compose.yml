@@ -1,0 +1,27 @@
+version: "3.9"
+
+services:
+  xml_reader:
+    image: xml_reader:1.0
+    build:
+      context: ../
+      dockerfile: docker/dev.Dockerfile
+    container_name: xml_reader
+    hostname: xml_reader
+    restart: unless-stopped
+    volumes:
+      - ../:/app
+    ports:
+      - "8013:8000"
+    command: sh -c "cargo watch -x run"
+    networks:
+      xml_reader:
+        ipv4_address: 172.13.5.2
+
+networks:
+  xml_reader:
+    ipam:
+      config:
+        - subnet: 172.13.0.0/16
+          ip_range: 172.13.5.0/24
+          gateway: 172.13.5.1
